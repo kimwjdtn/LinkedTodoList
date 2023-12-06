@@ -4,7 +4,6 @@ import SwiftData
 struct ContentView: View {
   @Environment(\.modelContext) private var modelContext
     @Query(sort: \Todo.upto) private var items: [Todo]
-//  @Query private var items: [Todo]
   @State var sort: Sort = .normal
   @State var popup = false
   let vm = TodoViewModel()
@@ -79,7 +78,8 @@ struct LinkView: View {
       label: {
         HStack {
           RowView(item: item)
-            .padding(3.0)
+            .padding(.horizontal, 3.0)
+            .padding(.vertical , 5.0)
         }
       })
     
