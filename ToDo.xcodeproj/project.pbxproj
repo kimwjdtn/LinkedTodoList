@@ -7,20 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A1604612B1DCACF005BF027 /* DetailedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1604602B1DCACF005BF027 /* DetailedView.swift */; };
+		0A1604632B1DCDB4005BF027 /* CreateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1604622B1DCDB4005BF027 /* CreateView.swift */; };
 		0A1896CC2B19007F001F17AA /* ToDoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1896CB2B19007F001F17AA /* ToDoApp.swift */; };
 		0A1896CE2B19007F001F17AA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1896CD2B19007F001F17AA /* ContentView.swift */; };
-		0A1896D02B19007F001F17AA /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1896CF2B19007F001F17AA /* Item.swift */; };
 		0A1896D22B19007F001F17AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A1896D12B19007F001F17AA /* Assets.xcassets */; };
 		0A1896D52B19007F001F17AA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A1896D42B19007F001F17AA /* Preview Assets.xcassets */; };
+		0A1896DC2B1900D1001F17AA /* Todo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1896DB2B1900D1001F17AA /* Todo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0A1604602B1DCACF005BF027 /* DetailedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedView.swift; sourceTree = "<group>"; };
+		0A1604622B1DCDB4005BF027 /* CreateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateView.swift; sourceTree = "<group>"; };
 		0A1896C82B19007F001F17AA /* ToDo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A1896CB2B19007F001F17AA /* ToDoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoApp.swift; sourceTree = "<group>"; };
 		0A1896CD2B19007F001F17AA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		0A1896CF2B19007F001F17AA /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		0A1896D12B19007F001F17AA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0A1896D42B19007F001F17AA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		0A1896DB2B1900D1001F17AA /* Todo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Todo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -34,6 +38,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A16045D2B1DC4A5005BF027 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				0A1896CD2B19007F001F17AA /* ContentView.swift */,
+				0A1604602B1DCACF005BF027 /* DetailedView.swift */,
+				0A1604622B1DCDB4005BF027 /* CreateView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		0A1896BF2B19007F001F17AA = {
 			isa = PBXGroup;
 			children = (
@@ -54,8 +68,8 @@
 			isa = PBXGroup;
 			children = (
 				0A1896CB2B19007F001F17AA /* ToDoApp.swift */,
-				0A1896CD2B19007F001F17AA /* ContentView.swift */,
-				0A1896CF2B19007F001F17AA /* Item.swift */,
+				0A16045D2B1DC4A5005BF027 /* View */,
+				0A1896DB2B1900D1001F17AA /* Todo.swift */,
 				0A1896D12B19007F001F17AA /* Assets.xcassets */,
 				0A1896D32B19007F001F17AA /* Preview Content */,
 			);
@@ -141,8 +155,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				0A1896CE2B19007F001F17AA /* ContentView.swift in Sources */,
-				0A1896D02B19007F001F17AA /* Item.swift in Sources */,
 				0A1896CC2B19007F001F17AA /* ToDoApp.swift in Sources */,
+				0A1604612B1DCACF005BF027 /* DetailedView.swift in Sources */,
+				0A1896DC2B1900D1001F17AA /* Todo.swift in Sources */,
+				0A1604632B1DCDB4005BF027 /* CreateView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
