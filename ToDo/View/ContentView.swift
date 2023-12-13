@@ -17,7 +17,7 @@ struct ContentView: View {
               SortingButton(sort: $sort)
             }
             ToolbarItem(placement: .topBarTrailing) {
-            CreateButton(popup: $popup)
+              CreateButton(popup: $popup)
             }
           }
         switch sort {
@@ -53,16 +53,7 @@ struct ContentView: View {
         Text("")
           .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-              Button {
-                popup.toggle()
-              } label: {
-                Image(systemName: "plus.app.fill")
-                  .resizable()
-                  .scaledToFit()
-              }
-              .popover(isPresented: $popup, content: {
-                CreateView(popup: $popup)
-              })
+              CreateButton(popup: $popup)
             }
           }
         let completedItems = items.filter {$0.isFinished == true}.sorted(by: {$0.upto < $1.upto})
