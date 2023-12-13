@@ -1,18 +1,53 @@
-//
-//  RowView.swift
-//  ToDo
-//
-//  Created by kimwjdtn on 12/7/23.
-//
-
 import SwiftUI
+import SwiftData
 
 struct RowView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+  let vm = TodoViewModel()
+  var item: Todo
+  var body: some View {
+    let (txt, date) = vm.getFormed(item: item)
+    GeometryReader { proxy in
+      HStack {
+        Text(txt)
+          .frame(width: proxy.frame(in: .local).width * 0.7, height: proxy.frame(in: .local).height, alignment: .leading)
+        Text(date)
+          .frame(width: proxy.frame(in: .local).width * 0.3, height: proxy.frame(in: .local).height, alignment: .leading)
+      }
     }
+  }
 }
 
 #Preview {
-    RowView()
+  struct preview: View {
+    let items = [Todo(upto: Date(), things: "5"), Todo(upto: Date(), things: "2"), Todo(upto: Date(), things: "3")]
+    var body: some View {
+      SectionView(items: items)
+    }
+  }
+  return preview()
+}
+
+struct SectionView: View {
+  let items: [Todo]
+  var text = ""
+  var body: some View {
+    let items = items.sorted { a, b in
+      if a.upto < b.upto {
+        return true
+      } else if a.upto > b.upto {
+        return false
+      } else {
+        let a = a.things[a.things.startIndex]
+        let b = b.things[b.things.startIndex]
+        return a < b
+      }
+    }
+    if !text.isEmpty {
+      Text(text)
+    }
+    List(items) { item in
+      NavigationLink(destination: DetailedView(item: item), label: {RowView(item: item)})
+    }
+    .navigationDestination(for: Todo.self, destination: {DetailedView(item: $0)})
+  }
 }

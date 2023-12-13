@@ -46,7 +46,7 @@ struct ItemContentsView: View {
       })) {
         Text("TodoThings")
       }
-      DatePicker("Choose", selection: Binding(get: {
+      DatePicker("Date", selection: Binding(get: {
         todo.upto
       }, set: { newValue in
         todo.upto = newValue

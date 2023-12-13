@@ -6,15 +6,20 @@ class Todo {
   @Attribute(.unique) let uuid = UUID()
   var isFirst: Bool {
     get {
-      self.pre == nil
+      if self.pre.isEmpty {
+        return true
+      } else {
+        return self.pre.allSatisfy({ pres in pres.isFinished })
+      }
     }
   }
   var upto: Date
   var things: String
   var nexts: [Todo] = [Todo]()
-  var pre: Todo?
+  var pre: [Todo] = [Todo]()
+  var isFinished = false
   
-  init(upto: Date, things: String, next: Todo? = nil, pre: Todo? = nil) {
+  init(upto: Date, things: String, next: Todo? = nil, pre: [Todo] = []) {
     self.upto = upto
     self.things = things
     self.pre = pre
@@ -26,7 +31,7 @@ class Todo {
   init() {
     self.upto = Date()
     self.things = ""
-    self.pre = nil
+    self.pre = []
   }
 }
 
@@ -61,4 +66,17 @@ struct TodoViewModel {
 enum Sort {
   case normal
   case uptoDate
+  case allUnFinished
+  
+  
+  mutating func changeSorting() {
+    switch self {
+      case .normal:
+        self = .uptoDate
+      case .uptoDate:
+        self = .allUnFinished
+      case .allUnFinished:
+        self = .normal
+    }
+  }
 }

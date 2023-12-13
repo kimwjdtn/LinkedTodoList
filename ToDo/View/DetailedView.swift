@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 
 struct DetailedView: View {
@@ -7,17 +8,36 @@ struct DetailedView: View {
   @State var item: Todo
   @State var b: Bool = false
   @State var popup: Bool = false
+  @State var linkPopup: Bool = false
   var body: some View {
     VStack {
       ItemContentsView(todo: item)
       HStack {
         Spacer()
         Button {
+          linkPopup.toggle()
+        } label: {
+          Text("Link")
+        }
+        .popover(isPresented: $linkPopup, content: {
+          LinkView(item: item)
+        })
+        Button {
           for i in item.nexts {
-            item.pre?.nexts.append(i)
+            for j in item.pre {
+              j.nexts.append(i)
+              i.pre.append(j)
+            }
+          }
+          for i in item.nexts {
+            i.pre.remove(at: i.pre.firstIndex(of: item)!)
+          }
+          for i in item.pre {
+            i.nexts.remove(at: i.nexts.firstIndex(of: item)!)
           }
           withAnimation {
             modelContext.delete(item)
+
             dismiss.callAsFunction()
           }
         } label: {
@@ -32,20 +52,24 @@ struct DetailedView: View {
         .popover(isPresented: $popup, content: {
           AddView(popup: $popup, todo: item)
         })
+        Button {
+          item.isFinished.toggle()
+          dismiss.callAsFunction()
+        } label: {
+          Text("complete")
+        }
         Spacer()
       }
       Divider()
-      if item.pre != nil {
+      if item.pre.isEmpty == false {
         Text("Before")
-        LinkView(item: item.pre!)
+        SectionView(items: item.pre)
         Divider()
       }
       if item.nexts.count > 0 {
         Text("After")
         NavigationStack {
-          ForEach(item.nexts) {i in
-            LinkView(item: i)
-          }
+          SectionView(items: item.nexts)
         }
       }
       Spacer()
@@ -80,7 +104,7 @@ struct AddView: View {
         })
         .padding(.trailing, 10.0)
         Button(action: {
-          newItem.pre = todo
+          newItem.pre.append(todo)
           todo.nexts.append(newItem)
           popup.toggle()
         }, label: {
@@ -88,5 +112,35 @@ struct AddView: View {
         })
       }
     }
+  }
+}
+
+struct LinkView: View {
+  @Environment(\.modelContext) private var modelContext
+  @Query(sort: \Todo.upto) var items: [Todo]
+  var item: Todo
+  var body: some View {
+    List(items.filter({$0 != self.item && !self.item.nexts.contains($0)})) { item in
+      GeometryReader { proxy in
+        HStack {
+          Toggle(isOn: Binding(get: {
+            self.item.pre.contains(item)
+          }, set: { newValue in
+            if newValue == true {
+              self.item.pre.append(item)
+              item.nexts.append(self.item)
+            } else {
+              self.item.pre.remove(at: self.item.pre.firstIndex(of: item)!)
+              item.nexts.remove(at: item.nexts.firstIndex(of: self.item)!)
+            }
+          }), label: {})
+          .frame(width: proxy.frame(in: .local).width * 0.2, height: proxy.frame(in: .local).height, alignment: .leading)
+          
+          Spacer()
+          RowView(item: item)
+        }
+      }
+}
+    EmptyView()
   }
 }
