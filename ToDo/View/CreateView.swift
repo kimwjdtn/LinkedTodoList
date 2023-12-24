@@ -36,6 +36,7 @@ struct CreateView: View {
 }
 
 struct ItemContentsView: View {
+  let vm: TodoViewModel = TodoViewModel()
   var todo: Todo
   var body: some View {
     VStack {
@@ -49,7 +50,7 @@ struct ItemContentsView: View {
       DatePicker("Date", selection: Binding(get: {
         todo.upto
       }, set: { newValue in
-        todo.upto = newValue
+        todo.upto = vm.getDate(date: newValue)
       }), displayedComponents: .date)
     }
     .padding([.leading,.trailing], 10.0)

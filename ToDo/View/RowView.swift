@@ -2,8 +2,14 @@ import SwiftUI
 import SwiftData
 
 struct RowView: View {
+  @State private var isDragging = false
   let vm = TodoViewModel()
   var item: Todo
+  var drag: some Gesture {
+    DragGesture()
+      .onChanged {_ in self.isDragging = true; print("on") }
+      .onEnded{ _ in self.isDragging = false; print("off") }
+  }
   var body: some View {
     let (txt, date) = vm.getFormed(item: item)
     GeometryReader { proxy in
@@ -12,7 +18,10 @@ struct RowView: View {
           .frame(width: proxy.frame(in: .local).width * 0.7, height: proxy.frame(in: .local).height, alignment: .leading)
         Text(date)
           .frame(width: proxy.frame(in: .local).width * 0.3, height: proxy.frame(in: .local).height, alignment: .leading)
+          .minimumScaleFactor(0.5)
       }
+      .lineLimit(1)
+      .gesture(drag)
     }
   }
 }

@@ -56,7 +56,15 @@ struct DetailedView: View {
           item.isFinished.toggle()
           dismiss.callAsFunction()
         } label: {
-          Text("complete")
+          HStack {
+            Text("complete")
+            Rectangle().fill(Color.clear)
+              .stroke(.secondary, style: .init(lineWidth: 2.0))
+              .frame(width: 20, height: 20)
+              .conditionalModifier(condition: item.isFinished, content: { view in
+                view.overlay(Image(systemName: "checkmark"))
+              })
+          }
         }
         Spacer()
       }
@@ -75,6 +83,7 @@ struct DetailedView: View {
       Spacer()
     }
   }
+  
 }
 
 
@@ -142,5 +151,18 @@ struct LinkView: View {
       }
 }
     EmptyView()
+  }
+}
+
+extension View {
+  @ViewBuilder func checkBox<Content: View> (
+    _ condition: Bool,
+    view: (Self) -> Content
+  ) -> some View {
+    if condition {
+      view(self)
+    } else {
+      self
+    }
   }
 }

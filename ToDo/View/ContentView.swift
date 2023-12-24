@@ -1,18 +1,29 @@
 import SwiftUI
+import AppIntents
 import SwiftData
 
 struct ContentView: View {
   @Environment(\.modelContext) private var modelContext
   @Query(sort: \Todo.upto) private var items: [Todo]
   @State var sort: Sort = .normal
+  @State var onlyFirst: Bool = true
   @State var popup = false
   let vm = TodoViewModel()
   var body: some View {
     TabView {
       NavigationStack {
-        let items = items.filter{$0.isFinished == false && $0.isFirst}
+        let items = items.filter{ item in
+          if onlyFirst {
+            item.isFinished == false && item.isFirst
+          } else {
+            item.isFinished == false
+          }
+        }
         Text("")
           .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+              FirstButton(onlyFirst: $onlyFirst)
+            }
             ToolbarItem(placement: .topBarTrailing) {
               SortingButton(sort: $sort)
             }
@@ -25,12 +36,9 @@ struct ContentView: View {
             SectionView(items: items)
             
           case .uptoDate:
-            let less1day = items.filter {$0.upto < Date(timeIntervalSinceNow: 86400) }
-            let less1week = items.filter { Calendar.current.date(byAdding: .day, value: 1, to: Date())! ... Calendar.current.date(byAdding: .day, value: 7, to: Date())! ~= $0.upto
-            }
-            let less1month = items.filter {
-              Calendar.current.date(byAdding: .day, value: 7, to: Date())! ... Calendar.current.date(byAdding: .day, value: 30, to: Date())! ~= $0.upto
-            }
+            let less1day = vm.getListFromRange(list: items, endDay: 0)
+            let less1week = vm.getListFromRange(list: items, startDay: 1, endDay: 7)
+            let less1month = vm.getListFromRange(list: items, startDay: 7, endDay: 30)
             if less1day.count > 0 {
               SectionView(items: less1day, text: "Today")
             }
@@ -40,10 +48,6 @@ struct ContentView: View {
             if less1month.count > 0 {
               SectionView(items: less1month, text: "This Month")
             }
-            
-          case .allUnFinished:
-            let items = self.items.filter { !$0.isFinished }
-            SectionView(items: items)
         }
       }
       .tabItem {
@@ -62,10 +66,35 @@ struct ContentView: View {
       .tabItem {
         Label("completed", systemImage: "checklist.checked")
       }
+      Button {
+        for i in items {
+          let vm = TodoViewModel()
+          i.upto = vm.getDate(date: i.upto)
+        }
+      } label: {
+        Image(systemName: "gear")
+      }
+      .tabItem {
+        Image(systemName: "gear")
+      }
     }
+    //TODO: Widget에서 사용 가능하도록 데이터 전송해야하는데...
+//    .onAppear {
+//      UserDefaults(suiteName: "group.Study.SwiftUI.ToDo")!.set(items, forKey: "items")
+//    }
   }
   
 
+  struct FirstButton: View {
+    @Binding var onlyFirst: Bool
+    var body: some View {
+      Button {
+        onlyFirst.toggle()
+      } label: {
+        Text("OnlyFirst")
+      }
+    }
+  }
   
   struct SortingButton: View {
     @Binding var sort: Sort
@@ -101,4 +130,3 @@ struct ContentView: View {
   ContentView()
     .modelContainer(for: Todo.self, inMemory: false)
 }
-
